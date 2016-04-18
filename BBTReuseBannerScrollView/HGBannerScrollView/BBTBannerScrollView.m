@@ -6,18 +6,27 @@
 //  Copyright © 2015年 北京嗨购电子商务有限公司. All rights reserved.
 //
 
-#import "BBTBannerScrollView.h"
 #import "BBTBannerItemView.h"
+#import "BBTBannerScrollView.h"
 
-#define kBannerMaxNumber            (4)
+#define kBannerViewMaxPage           (3)
+#define kBannerViewHalfRate          (0.5)
+
+typedef enum : NSUInteger {
+    BBTBannerViewScrollDirectionNone,
+    BBTBannerViewScrollDirectionLeft,
+    BBTBannerViewScrollDirectionRight
+} BBTBannerViewScrollDirection;
 
 @interface BBTBannerScrollView () <UIScrollViewDelegate> {
     UIScrollView *_scrollView;
     NSInteger _totalPage;
     NSInteger _currentIndex;
-    NSMutableDictionary *_visibleItemViewsDictionary;
-    NSMutableDictionary *_reuseableItemViewsDictionary;
+    NSInteger _nextIndex;
+    BBTBannerItemView *_currentItemView;
+    BBTBannerItemView *_otherItemView;
 }
+@property (nonatomic, assign) BBTBannerViewScrollDirection scrollDirection;
 
 @end
 
@@ -28,9 +37,10 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _visibleItemViewsDictionary = [NSMutableDictionary dictionary];
-        _reuseableItemViewsDictionary = [NSMutableDictionary dictionary];
         [self createScrollView];
+        [self currentItemView];
+        [self otherItemView];
+        [self resetBannerScrollViewIndex];
     }
     
     return self;
@@ -38,32 +48,36 @@
 
 #pragma mark ###################### Public ######################
 
-- (void)reloadData {
-    [self reset];
-    
-    if ([self.dataSource respondsToSelector:@selector(numberOfBannerScrollView:)]) {
-        _totalPage = [self.dataSource numberOfBannerScrollView:self];
-        [_scrollView setContentSize:CGSizeMake(self.frame.size.width * _totalPage, self.frame.size.height)];
-    }
-    
-    [self layoutVisibleItemViews];
+- (void)setBannerImageArray:(NSMutableArray *)bannerImageArray {
+    _bannerImageArray = bannerImageArray;
+    _totalPage = _bannerImageArray.count;
+    [self resetBannerScrollViewIndex];
+    [self setBannerScrollViewContentSize];
+    _currentItemView.title = _bannerImageArray.firstObject;
 }
 
-- (id)itemViewOfIndex:(NSInteger)index {
-    BBTBannerItemView *currentItemView = _visibleItemViewsDictionary[@(index)];
-    
-    return currentItemView;
-}
-
-- (id)dequeueReuseableItemViewWithIdentifier:(NSString *)reuseIndentifier {
-    NSMutableArray *reuseItemViews = _reuseableItemViewsDictionary[reuseIndentifier];
-    BBTBannerItemView *itemView = nil;
-    if (reuseItemViews.count > 0) {
-        itemView = reuseItemViews[0];
-        [reuseItemViews removeObject:itemView];
+- (void)setScrollDirection:(BBTBannerViewScrollDirection)scrollDirection {
+    if (_scrollDirection == scrollDirection) {
+        return;
     }
-    
-    return itemView;
+    _scrollDirection = scrollDirection;
+    if (scrollDirection == BBTBannerViewScrollDirectionNone) {
+        return;
+    }
+    if (_scrollDirection == BBTBannerViewScrollDirectionRight) {
+        _otherItemView.frame = CGRectMake(0, 0, self.width, self.height);
+        _nextIndex = _currentIndex - 1;
+        if (_nextIndex < 0) {//如果小于0 则改成最后一张
+            _nextIndex = _totalPage - 1;
+        }
+    } else if (_scrollDirection == BBTBannerViewScrollDirectionLeft){
+        _otherItemView.frame = CGRectMake(CGRectGetMaxX(_currentItemView.frame), 0, self.width, self.height);
+        _nextIndex = _currentIndex + 1;
+        if (_nextIndex > (_totalPage - 1)) {
+            _nextIndex = 0;
+        }
+    }
+    _otherItemView.title = self.bannerImageArray[_nextIndex];
 }
 
 #pragma mark ###################### Delegate ######################
@@ -72,95 +86,63 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat offsetX = scrollView.contentOffset.x;
-    _currentIndex = offsetX / scrollView.frame.size.width;
-    if ([self.delegate respondsToSelector:@selector(bannerScrollView:didScrollToIndex:)]) {
-        [self.delegate bannerScrollView:self didScrollToIndex:_currentIndex];
+    if (offsetX > self.width) {
+        self.scrollDirection = BBTBannerViewScrollDirectionLeft;
+    } else if (offsetX < self.width) {
+        self.scrollDirection = BBTBannerViewScrollDirectionRight;
+    } else {
+        self.scrollDirection = BBTBannerViewScrollDirectionNone;
     }
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    [self reuseItemViews];
-    [self layoutVisibleItemViews];
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self pauseBannerScrollView];
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    [self pauseBannerScrollView];
 }
 
 #pragma mark ###################### Private ######################
 
-- (void)reset {
+- (void)resetBannerScrollViewIndex {
     _currentIndex = 0;
-    
-    for (UIView *view in _scrollView.subviews) {
-        [view removeFromSuperview];
-    }
-    
-    if (_visibleItemViewsDictionary.allValues.count > 0) {
-        [_visibleItemViewsDictionary removeAllObjects];
-    }
-    
-    if (_reuseableItemViewsDictionary.allValues.count > 0) {
-        [_reuseableItemViewsDictionary removeAllObjects];
+    _scrollDirection = BBTBannerViewScrollDirectionNone;
+}
+
+- (void)setBannerScrollViewContentSize {
+    if (_totalPage > 1) {//大于一页时才可以滚动
+        _scrollView.scrollEnabled = YES;
+        _currentItemView.frame = CGRectMake(self.width, 0, self.width, self.height);
+        _otherItemView.frame = CGRectMake(CGRectGetMaxX(_currentItemView.frame), 0, self.width, self.height);
+        [_scrollView setContentSize:CGSizeMake(self.width * kBannerViewMaxPage, self.height)];
+        [_scrollView setContentOffset:CGPointMake(self.width, 0)];
+    } else {
+        _scrollView.scrollEnabled = NO;
     }
 }
 
-- (void)layoutVisibleItemViews {
-    NSInteger previousIndex = (_currentIndex - 1);
-    NSInteger nextIndex = (_currentIndex + 1);
-    
-    if (_currentIndex >= 0 && _currentIndex <= (_totalPage - 1)) {
-        [self layoutItemViewWithIndex:_currentIndex];
+- (void)pauseBannerScrollView {
+    //未滚动则不重新设置title
+    if (_scrollDirection == BBTBannerViewScrollDirectionNone) {
+      return;
     }
     
-    if (previousIndex >= 0 && previousIndex <= (_totalPage - 2)) {
-        [self layoutItemViewWithIndex:previousIndex];
-    }
-    
-    if (nextIndex >= 1 && nextIndex <= (_totalPage - 1)) {
-        [self layoutItemViewWithIndex:nextIndex];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(bannerScrollView:didScrollToIndex:)]) {
-        [self.delegate bannerScrollView:self didScrollToIndex:_currentIndex];
-    }
-}
-
-- (void)reuseItemViews {
-    NSInteger previousIndex = (_currentIndex - 1);
-    NSInteger nextIndex = (_currentIndex + 1);
-    
-    for (NSInteger i = 0; i < _totalPage; i ++) {
-        //前一页、当前页和后一页不参与回收
-        if (i != previousIndex && i != _currentIndex && i != nextIndex) {
-            BBTBannerItemView *itemView = _visibleItemViewsDictionary[@(i)];
-            if (itemView) {
-                NSMutableArray *reuseableItemViews = (NSMutableArray *)[_reuseableItemViewsDictionary objectForKey:itemView.reuseIndentifier];
-                if (reuseableItemViews.count <= 0) {
-                    reuseableItemViews = [NSMutableArray array];
-                    _reuseableItemViewsDictionary[itemView.reuseIndentifier] = reuseableItemViews;
-                }
-                
-                [reuseableItemViews addObject:itemView];
-                
-                [_visibleItemViewsDictionary removeObjectForKey:@(i)];
-                
-                [itemView removeFromSuperview];
-            }
-        }
-    }
-}
-
-- (void)layoutItemViewWithIndex:(NSInteger)index {
-    BBTBannerItemView *usingItemView = _visibleItemViewsDictionary[@(index)];
-    if (usingItemView == nil && [self.dataSource respondsToSelector:@selector(bannerScrollView:itemViewForIndex:)]) {
-        CGRect frame = CGRectMake(index * _scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
-        BBTBannerItemView *itemView = [self.dataSource bannerScrollView:self itemViewForIndex:index];
-        itemView.itemIndex = index;
-        itemView.frame = frame;
-        [_scrollView addSubview:itemView];
-        
-        [_visibleItemViewsDictionary setObject:itemView forKey:@(index)];
-    }
+    _currentIndex = _nextIndex;
+    _currentItemView.frame = CGRectMake(self.width, 0, self.width, self.height);
+    _currentItemView.title = _otherItemView.title;
+    _scrollView.contentOffset = CGPointMake(self.width, 0);
 }
 
 #pragma mark #################### Getter && Setter ####################
+
+- (CGFloat)width {
+    return CGRectGetWidth(self.frame);
+}
+
+- (CGFloat)height {
+    return CGRectGetHeight(self.frame);
+}
 
 - (UIScrollView *)createScrollView {
     if (!_scrollView) {
@@ -173,6 +155,26 @@
     }
     
     return _scrollView;
+}
+
+- (BBTBannerItemView *)currentItemView {
+    if (!_currentItemView) {
+        CGRect frame = CGRectMake(0, 0, self.width, self.height);
+        _currentItemView = [[BBTBannerItemView alloc] initWithFrame:frame];
+        [_scrollView addSubview:_currentItemView];
+    }
+    
+    return _currentItemView;
+}
+
+- (BBTBannerItemView *)otherItemView {
+    if (!_otherItemView) {
+        CGRect frame = CGRectMake(0, 0, self.width, self.height);
+        _otherItemView = [[BBTBannerItemView alloc] initWithFrame:frame];
+        [_scrollView addSubview:_otherItemView];
+    }
+    
+    return _otherItemView;
 }
 
 @end

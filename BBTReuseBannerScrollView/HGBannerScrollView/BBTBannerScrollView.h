@@ -10,26 +10,6 @@
 
 @interface BBTBannerScrollView : UIView
 
-@property (nonatomic, weak) id dataSource;
-@property (nonatomic, weak) id delegate;
-
-- (void)reloadData;
-- (id)itemViewOfIndex:(NSInteger)index;
-- (id)dequeueReuseableItemViewWithIdentifier:(NSString *)reuseIndentifier;
-
-@end
-
-@protocol BBTBannerScrollViewDataSource <NSObject>
-@required
-
-- (NSInteger)numberOfBannerScrollView:(BBTBannerScrollView *)bannerScrollView;
-- (id)bannerScrollView:(BBTBannerScrollView *)bannerScrollView itemViewForIndex:(NSInteger)index;
-
-@end
-
-@protocol BBTBannerScrollViewDelegate <NSObject>
-@optional
-
-- (void)bannerScrollView:(BBTBannerScrollView *)bannerScrollView didScrollToIndex:(NSInteger)index;
+@property (nonatomic, strong) NSMutableArray *bannerImageArray;
 
 @end

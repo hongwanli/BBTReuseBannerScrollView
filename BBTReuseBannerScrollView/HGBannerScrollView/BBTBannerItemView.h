@@ -10,10 +10,7 @@
 
 @interface BBTBannerItemView : UIView
 
-@property (nonatomic, strong) NSString *reuseIndentifier;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, assign) NSInteger itemIndex;
-
-- (instancetype)initWithIndentifier:(NSString *)reuseIndentifier;
 
 @end

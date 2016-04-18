@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38513B821CC4AA2E00B9AC01 /* BBTBannerItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38513B7F1CC4AA2E00B9AC01 /* BBTBannerItemView.m */; };
+		38513B831CC4AA2E00B9AC01 /* BBTBannerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38513B811CC4AA2E00B9AC01 /* BBTBannerScrollView.m */; };
 		386BFC0E1C055B8600801F30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 386BFC0D1C055B8600801F30 /* main.m */; };
 		386BFC111C055B8600801F30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 386BFC101C055B8600801F30 /* AppDelegate.m */; };
 		386BFC141C055B8600801F30 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 386BFC131C055B8600801F30 /* ViewController.m */; };
@@ -15,8 +17,6 @@
 		386BFC1C1C055B8600801F30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 386BFC1A1C055B8600801F30 /* LaunchScreen.storyboard */; };
 		386BFC271C055B8700801F30 /* BBTReuseBannerScrollViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 386BFC261C055B8700801F30 /* BBTReuseBannerScrollViewTests.m */; };
 		386BFC321C055B8700801F30 /* BBTReuseBannerScrollViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 386BFC311C055B8700801F30 /* BBTReuseBannerScrollViewUITests.m */; };
-		386BFC441C055B9800801F30 /* BBTBannerItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 386BFC411C055B9800801F30 /* BBTBannerItemView.m */; };
-		386BFC451C055B9800801F30 /* BBTBannerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 386BFC431C055B9800801F30 /* BBTBannerScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +37,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		38513B7E1CC4AA2E00B9AC01 /* BBTBannerItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBTBannerItemView.h; sourceTree = "<group>"; };
+		38513B7F1CC4AA2E00B9AC01 /* BBTBannerItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBTBannerItemView.m; sourceTree = "<group>"; };
+		38513B801CC4AA2E00B9AC01 /* BBTBannerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBTBannerScrollView.h; sourceTree = "<group>"; };
+		38513B811CC4AA2E00B9AC01 /* BBTBannerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBTBannerScrollView.m; sourceTree = "<group>"; };
 		386BFC091C055B8600801F30 /* BBTReuseBannerScrollView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BBTReuseBannerScrollView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		386BFC0D1C055B8600801F30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		386BFC0F1C055B8600801F30 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,10 +57,6 @@
 		386BFC2D1C055B8700801F30 /* BBTReuseBannerScrollViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BBTReuseBannerScrollViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		386BFC311C055B8700801F30 /* BBTReuseBannerScrollViewUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBTReuseBannerScrollViewUITests.m; sourceTree = "<group>"; };
 		386BFC331C055B8700801F30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		386BFC401C055B9800801F30 /* BBTBannerItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBTBannerItemView.h; sourceTree = "<group>"; };
-		386BFC411C055B9800801F30 /* BBTBannerItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBTBannerItemView.m; sourceTree = "<group>"; };
-		386BFC421C055B9800801F30 /* BBTBannerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBTBannerScrollView.h; sourceTree = "<group>"; };
-		386BFC431C055B9800801F30 /* BBTBannerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBTBannerScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +84,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		38513B7D1CC4AA2E00B9AC01 /* HGBannerScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				38513B7E1CC4AA2E00B9AC01 /* BBTBannerItemView.h */,
+				38513B7F1CC4AA2E00B9AC01 /* BBTBannerItemView.m */,
+				38513B801CC4AA2E00B9AC01 /* BBTBannerScrollView.h */,
+				38513B811CC4AA2E00B9AC01 /* BBTBannerScrollView.m */,
+			);
+			path = HGBannerScrollView;
+			sourceTree = "<group>";
+		};
 		386BFC001C055B8600801F30 = {
 			isa = PBXGroup;
 			children = (
@@ -112,7 +123,7 @@
 				386BFC121C055B8600801F30 /* ViewController.h */,
 				386BFC131C055B8600801F30 /* ViewController.m */,
 				386BFC151C055B8600801F30 /* Main.storyboard */,
-				386BFC3F1C055B9800801F30 /* HGBannerScrollView */,
+				38513B7D1CC4AA2E00B9AC01 /* HGBannerScrollView */,
 				386BFC181C055B8600801F30 /* Assets.xcassets */,
 				386BFC1A1C055B8600801F30 /* LaunchScreen.storyboard */,
 				386BFC1D1C055B8600801F30 /* Info.plist */,
@@ -145,17 +156,6 @@
 				386BFC331C055B8700801F30 /* Info.plist */,
 			);
 			path = BBTReuseBannerScrollViewUITests;
-			sourceTree = "<group>";
-		};
-		386BFC3F1C055B9800801F30 /* HGBannerScrollView */ = {
-			isa = PBXGroup;
-			children = (
-				386BFC401C055B9800801F30 /* BBTBannerItemView.h */,
-				386BFC411C055B9800801F30 /* BBTBannerItemView.m */,
-				386BFC421C055B9800801F30 /* BBTBannerScrollView.h */,
-				386BFC431C055B9800801F30 /* BBTBannerScrollView.m */,
-			);
-			path = HGBannerScrollView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,9 +290,9 @@
 			files = (
 				386BFC141C055B8600801F30 /* ViewController.m in Sources */,
 				386BFC111C055B8600801F30 /* AppDelegate.m in Sources */,
-				386BFC441C055B9800801F30 /* BBTBannerItemView.m in Sources */,
+				38513B821CC4AA2E00B9AC01 /* BBTBannerItemView.m in Sources */,
 				386BFC0E1C055B8600801F30 /* main.m in Sources */,
-				386BFC451C055B9800801F30 /* BBTBannerScrollView.m in Sources */,
+				38513B831CC4AA2E00B9AC01 /* BBTBannerScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +516,7 @@
 				386BFC381C055B8700801F30 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		386BFC391C055B8700801F30 /* Build configuration list for PBXNativeTarget "BBTReuseBannerScrollViewTests" */ = {
 			isa = XCConfigurationList;
@@ -524,6 +525,7 @@
 				386BFC3B1C055B8700801F30 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		386BFC3C1C055B8700801F30 /* Build configuration list for PBXNativeTarget "BBTReuseBannerScrollViewUITests" */ = {
 			isa = XCConfigurationList;
@@ -532,6 +534,7 @@
 				386BFC3E1C055B8700801F30 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

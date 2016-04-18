@@ -16,10 +16,9 @@
 
 @implementation BBTBannerItemView
 
-- (instancetype)initWithIndentifier:(NSString *)reuseIndentifier {
-    self = [super init];
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
     if (self) {
-        self.reuseIndentifier = reuseIndentifier;
         [self titleLabel];
     }
     
@@ -30,7 +29,7 @@
 
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _titleLabel = [[UILabel alloc] initWithFrame:self.frame];
         _titleLabel.font = [UIFont systemFontOfSize:50];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_titleLabel];
@@ -40,7 +39,7 @@
 }
 
 - (void)setTitle:(NSString *)title {
-    _titleLabel.frame = CGRectMake(0, 0, 320, 600);
+    _title = title;
     _titleLabel.text = title;
 }
 

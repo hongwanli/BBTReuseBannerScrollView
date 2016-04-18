@@ -10,7 +10,7 @@
 #import "BBTBannerItemView.h"
 #import "BBTBannerScrollView.h"
 
-@interface ViewController () <BBTBannerScrollViewDataSource> {
+@interface ViewController () {
     BBTBannerScrollView *_bannerScrollView;
     NSInteger _createTime;
 }
@@ -22,8 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self createBannerScrollView];
-    [_bannerScrollView reloadData];
+    [self createBannerScrollView].bannerImageArray = [NSMutableArray arrayWithObjects:@"1",@"2",@"3", nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,34 +30,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark ################### Delegate ######################
-
-#pragma mark - HGBannerScrollViewDataSource
-
-- (NSInteger)numberOfBannerScrollView:(BBTBannerScrollView *)bannerScrollView {
-    return 10;
-}
-
-- (BBTBannerItemView *)bannerScrollView:(BBTBannerScrollView *)bannerScrollView itemViewForIndex:(NSInteger)index {
-    static NSString *reuseIndentifier = @"BBTBannerItemView";
-    BBTBannerItemView *itemView = [bannerScrollView dequeueReuseableItemViewWithIdentifier:reuseIndentifier];
-    if (itemView == nil) {
-        _createTime ++;
-        itemView = [[BBTBannerItemView alloc] initWithIndentifier:reuseIndentifier];
-        NSLog(@"第%@次创建",@(_createTime));
-    }
-    
-    itemView.title = [NSString stringWithFormat:@"%@",@(index)];
-    
-    return itemView;
-}
-
 #pragma mark ################### Getter && Setter ######################
 
 - (BBTBannerScrollView *)createBannerScrollView {
     if (!_bannerScrollView) {
         _bannerScrollView = [[BBTBannerScrollView alloc] initWithFrame:self.view.bounds];
-        _bannerScrollView.dataSource = self;
         [self.view addSubview:_bannerScrollView];
     }
     
