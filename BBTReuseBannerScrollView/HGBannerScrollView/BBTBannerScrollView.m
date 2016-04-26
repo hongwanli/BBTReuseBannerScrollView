@@ -57,6 +57,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)setScrollDirection:(BBTBannerViewScrollDirection)scrollDirection {
+    //防止多次执行
     if (_scrollDirection == scrollDirection) {
         return;
     }
@@ -129,8 +130,8 @@ typedef enum : NSUInteger {
     }
     
     _currentIndex = _nextIndex;
-    _currentItemView.frame = CGRectMake(self.width, 0, self.width, self.height);
     _currentItemView.title = _otherItemView.title;
+    _currentItemView.frame = CGRectMake(self.width, 0, self.width, self.height);
     _scrollView.contentOffset = CGPointMake(self.width, 0);
 }
 
